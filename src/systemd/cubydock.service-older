@@ -1,0 +1,20 @@
+[Unit]
+Description = Bank
+After = network.target
+
+[Service]
+PermissionsStartOnly = true
+PIDFile = /run/CubyDock/cubyweb.pid
+User = cuby
+Group = cuby
+WorkingDirectory = /var/www/html/cubydock
+ExecStartPre = /bin/mkdir /run/CubyDock
+ExecStartPre = /bin/chown -R cuby:cuby /run/CubyDock
+ExecStart = /usr/bin/gunicorn --bind 0.0.0.0:8000 --pid /run/CubyDock/cubyweb.pid cuby.wsgi
+ExecReload = /bin/kill -s HUP $MAINPID
+ExecStop = /bin/kill -s TERM $MAINPID
+ExecStopPost = /bin/rm -rf /run/CubyDock
+PrivateTmp = true
+
+[Install]
+WantedBy = multi-user.target

@@ -1,0 +1,4 @@
+django==3.0.*
+django-cryptography
+chaussette
+circus

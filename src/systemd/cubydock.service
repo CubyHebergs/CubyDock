@@ -1,0 +1,14 @@
+[Unit]
+Description=CubyDock servie webpanel
+After=syslog.target network.target nss-lookup.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/html/cubydock
+ExecReload=/var/www/html/cubydock/.venv/bin/circusctl reload
+ExecStart=/bin/sh -c 'source /var/www/html/cubydock/.venv/bin/activate && /var/www/html/cubydock/.venv/bin/python3.8 /var/www/html/cubydock/.venv/bin/circusd /var/www/html/cubydock/circus.ini'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy = multi-user.target
