@@ -97,6 +97,9 @@ sudo chmod 775 -R /var/www/html/cubydock
 # collectstatic django
 sudo python3 /var/www/html/cubydock/manage.py collectstatic <<< "yes"
 
+# collect LANGUAGE
+sudo python3 /var/www/html/cubydock/manage.py compilemessages
+
 # prepare database
 sudo python3 /var/www/html/cubydock/manage.py makemigrations
 sudo python3 /var/www/html/cubydock/manage.py migrate

@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+# This is defined here as a do-nothing function because we can't import
+# django.utils.translation -- that module depends on the settings.
+def gettext_noop(s):
+    return s
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -108,15 +113,24 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
-LANGUAGE_CODE = 'fr-fr'
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
+
+
+LANGUAGES = [
+    ('en', gettext_noop('English')),
+    ('fr', gettext_noop('French')),
+]
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/'),
+)
+
+LANGUAGE_CODE = 'fr'
+LANGUAGES_BIDI = ["en", "fr"]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
