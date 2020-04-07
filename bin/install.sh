@@ -94,6 +94,24 @@ sudo cp -R ../src/web-app/. /var/www/html/cubydock
 sudo chown cuby:cuby -R /var/www/html/cubydock
 sudo chmod 775 -R /var/www/html/cubydock
 
+# select language install
+echo "Please select language for cubydock"
+echo "1. French"
+echo "2. English"
+read -e -p "select your language number ? :" input_language
+
+if [ "$input_language" != "${input_language#[1]}" ]; then
+  echo "French language select"
+  sudo sed -i "132s/en/fr/g" /var/www/html/cubydock/cuby/settings.py
+elif [ "$input_language" != "${input_language#[2]}" ]; then
+  echo "English language select"
+  sudo sed -i "132s/en/en/g" /var/www/html/cubydock/cuby/settings.py
+fi
+
+# renewgenerate SECRET_KEY
+NEW_SECRET_KEY=$(sudo python3 -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')
+sudo sed -i "28s/SECRET_KEY_RANDOM/$NEW_SECRET_KEY/g" /var/www/html/cubydock/cuby/settings.py
+
 # collectstatic django
 sudo python3 /var/www/html/cubydock/manage.py collectstatic <<< "yes"
 

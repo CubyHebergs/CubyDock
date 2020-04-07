@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'g3tb3mu4y9g%qe-=p3glrmy2tlt4cfz+)ihe0m-n$dvi_p67vh'
+SECRET_KEY = 'SECRET_KEY_RANDOM'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -129,7 +129,7 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale/'),
 )
 
-LANGUAGE_CODE = 'fr'
+LANGUAGE_CODE = 'en'
 LANGUAGES_BIDI = ["en", "fr"]
 
 # Static files (CSS, JavaScript, Images)
