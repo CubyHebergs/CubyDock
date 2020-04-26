@@ -70,7 +70,9 @@ if grep -q $group /etc/group
  else
      sudo useradd cuby
      sudo groupadd cuby
+     sudo groupadd shadow
      sudo usermod -a -G cuby cuby
+     sudo usermod -a -G shadow cuby
      password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-8} | head -n 1)
      echo "cuby:${password}" | sudo chpasswd
  fi

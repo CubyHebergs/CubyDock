@@ -1,11 +1,11 @@
-from tools.dpam import pam
+from app.tools.dpam import pam
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.auth.backends import BaseBackend
 
-class PAMBackend(BaseBackend):
+class PAMBackend:
     def authenticate(self, username=None, password=None):
+
         service = getattr(settings, 'PAM_SERVICE', 'login')
         if not pam.authenticate(username, password, service=service):
             return None

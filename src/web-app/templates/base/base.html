@@ -76,6 +76,10 @@
   <script src="{% static "plugins/apex/apexcharts.min.js" %}"></script>
   <script src="{% static "assets/js/dashboard/dash_1.js" %}"></script>
   {% endblock %}
+  <script type="text/javascript">
+    // using jQuery
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+  </script>
   <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
 </body>

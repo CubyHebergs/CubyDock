@@ -175,8 +175,11 @@ class pam():
         cpassword = c_char_p(password)
 
         # if X DISPLAY is set, use it, otherwise get the STDIN tty
-        ctty = os.environ.get('DISPLAY', os.ttyname(0)).encode(encoding)
+        #ctty = os.environ.get('DISPLAY', os.ttyname(0)).encode(encoding)
+        #ctty = c_char_p(ctty)
+        ctty = 'STDIN'.encode(encoding)
         ctty = c_char_p(ctty)
+
 
         handle = PamHandle()
         conv   = PamConv(my_conv, 0)

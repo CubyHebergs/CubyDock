@@ -24,7 +24,6 @@ from app.home.views import Home
 urlpatterns = [
     path('', Home.loginPage, name="login"),
     path('login', Home.loginPage, name="login"),
-    path('admin/', admin.site.urls),
 
     # static files access in production
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
