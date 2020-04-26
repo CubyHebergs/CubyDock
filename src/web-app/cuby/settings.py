@@ -136,7 +136,7 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale/'),
 )
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'fr'
 LANGUAGES_BIDI = ["en", "fr"]
 
 # Static files (CSS, JavaScript, Images)

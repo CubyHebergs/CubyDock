@@ -107,10 +107,10 @@ read -e -p "select your language number ? :" input_language
 
 if [ "$input_language" != "${input_language#[1]}" ]; then
   echo "French language select"
-  sudo sed -i "132s/en/fr/g" /var/www/html/cubydock/cuby/settings.py
+  sudo sed -i "139s/en/fr/g" /var/www/html/cubydock/cuby/settings.py
 elif [ "$input_language" != "${input_language#[2]}" ]; then
   echo "English language select"
-  sudo sed -i "132s/en/en/g" /var/www/html/cubydock/cuby/settings.py
+  sudo sed -i "139s/en/en/g" /var/www/html/cubydock/cuby/settings.py
 fi
 
 # renewgenerate SECRET_KEY
