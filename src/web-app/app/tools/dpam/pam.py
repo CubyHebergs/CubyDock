@@ -10,6 +10,10 @@
 # added pam_setcred to reset credentials after seeing Leon Walker's remarks
 # added byref as well
 # use readline to prestuff the getuser input
+#
+# Modified by Vladimir Souchet (vBlackOut), 2020-26-4
+# Fix Inappropriate ioctl for device
+# write for Python 3.x
 
 '''
 PAM module for python
@@ -21,9 +25,9 @@ Implemented using ctypes, so no compilation is necessary.
 '''
 
 __all__      = ['pam']
-__version__  = '1.8.5rc1'
-__author__   = 'David Ford <david@blue-labs.org>'
-__released__ = '2019 November 12'
+__version__  = '1.8.6rc1'
+__author__   = 'Vladimir Souchet <vladimir.souchet@cuby-hebergs.com>'
+__released__ = '2020 April 26'
 
 import os
 import sys
@@ -177,6 +181,7 @@ class pam():
         # if X DISPLAY is set, use it, otherwise get the STDIN tty
         #ctty = os.environ.get('DISPLAY', os.ttyname(0)).encode(encoding)
         #ctty = c_char_p(ctty)
+        encoding = "utf-8"
         ctty = 'STDIN'.encode(encoding)
         ctty = c_char_p(ctty)
 
