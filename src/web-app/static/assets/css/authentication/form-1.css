@@ -27,7 +27,7 @@ body {
     align-items: center;
     display: flex;
     flex-grow: 1;
-    padding: .71428571rem 2.85714286rem;
+    /*padding: .71428571rem 2.85714286rem;*/
     width: 100%;
     min-height: 100%;
 }

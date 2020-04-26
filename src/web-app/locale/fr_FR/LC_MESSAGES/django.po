@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-25 04:36+0000\n"
+"POT-Creation-Date: 2020-04-26 06:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,34 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: cuby/settings.py:124
+msgid "English"
+msgstr "Anglais"
+
+#: cuby/settings.py:125
+msgid "French"
+msgstr "Français"
+
 #: templates/base/base_login.html:28
 msgid "log_in_to__login_page"
 msgstr "Connection à"
+
+#: templates/base/base_login.html:34
+msgid "username_to__login_page"
+msgstr "Utilisateur"
+
+#: templates/base/base_login.html:39
+msgid "passsword_to__login_page"
+msgstr "Mot de passe"
+
+#: templates/base/base_login.html:43
+msgid "show_password_to__login_page"
+msgstr "Voir mot de passe"
+
+#: templates/base/base_login.html:50
+msgid "log_in_button_to__login_page"
+msgstr "Connection"
+
+#: templates/base/base_login.html:65
+msgid "for_got_password_to__login_page"
+msgstr "Mot de passe oublié ?"

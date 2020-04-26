@@ -22,6 +22,7 @@ if [ "$input_reinstall" != "${input_reinstall#[Yy]}" ]; then
     echo "Delete User/Group cuby"
     sudo userdel -r cuby
     sudo groupdel cuby
+    sudo groupdel shadow
 
 elif [ "$input_reinstall" != "${input_reinstall#[Nn]}" ]; then
     echo "Ok, good bye"
@@ -41,22 +42,22 @@ fi
 if [[ "$DISTRO"  =~ "Manjaro" ]]; then
   DEPO="sudo pacman"
   DEPO_INSTALL="-S --noconfirm"
-  PACKAGE="docker"
+  PACKAGE="docker pam"
 
 elif [[ "$DISTRO"  =~ "Fedora" ]] || [[  "$DISTRO"  =~ "CentOS" ]] && [[  "$VERSION"  =~ "8." ]]; then
   DEPO="sudo dnf"
   DEPO_INSTALL="install -y"
-  PACKAGE="docker"
+  PACKAGE="docker pam pam-devel"
 
 elif [[  "$DISTRO"  =~ "CentOS" ]] && [[  "$VERSION"  =~ "7." ]]; then
   DEPO="sudo yum"
   DEPO_INSTALL="install -y"
-  PACKAGE="docker"
+  PACKAGE="docker pam pam-devel"
 
 elif [[ "$DISTRO"  =~ "Debian"  ]] || [[ "$DISTRO"  =~ "Ubuntu"  ]]; then
-  DEPO="sudo apt-get"
+  DEPO="sudo apt-get update && sudo apt-get"
   DEPO_INSTALL="-y install"
-  PACKAGE="docker"
+  PACKAGE="docker pam"
 fi
 
 # check group cuby if already exist
@@ -70,6 +71,8 @@ if grep -q $group /etc/group
      sudo useradd cuby
      sudo groupadd cuby
      sudo usermod -a -G cuby cuby
+     password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-8} | head -n 1)
+     echo "cuby:${password}" | sudo chpasswd
  fi
 
 # install dependancy system
@@ -141,6 +144,7 @@ else
   echo ""
   echo " -------------------------------------------------------- "
   echo "| Install finish web panel access on http://0.0.0.0:8000 |"
+  echo "|    Username is: cuby Your Password: ${password}           |"
   echo " -------------------------------------------------------- "
 fi
 
