@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-26 06:42+0000\n"
+"POT-Creation-Date: 2020-05-16 12:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,34 +17,40 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: cuby/settings.py:124
+#: cuby/settings.py:131
 msgid "English"
 msgstr "English"
 
-#: cuby/settings.py:125
+#: cuby/settings.py:132
 msgid "French"
 msgstr "French"
 
-#: templates/base/base_login.html:28
+#: templates/base/base_login.html:27
 msgid "log_in_to__login_page"
 msgstr "Log In to"
 
-#: templates/base/base_login.html:34
+#: templates/base/base_login.html:33
+#, fuzzy
+#| msgid "Failed Authentificate"
+msgid "error_log_in_to__login_page"
+msgstr "Failed Authentificate"
+
+#: templates/base/base_login.html:39
 msgid "username_to__login_page"
 msgstr "Username"
 
-#: templates/base/base_login.html:39
+#: templates/base/base_login.html:44
 msgid "passsword_to__login_page"
 msgstr "Password"
 
-#: templates/base/base_login.html:43
+#: templates/base/base_login.html:48
 msgid "show_password_to__login_page"
 msgstr "Show password"
 
-#: templates/base/base_login.html:50
+#: templates/base/base_login.html:55
 msgid "log_in_button_to__login_page"
 msgstr "Log In"
 
-#: templates/base/base_login.html:65
+#: templates/base/base_login.html:70
 msgid "for_got_password_to__login_page"
 msgstr "For got password ? "
