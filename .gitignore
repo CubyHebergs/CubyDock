@@ -8,6 +8,7 @@
 *.sqlite3
 *.log
 .tox/
+settings.py
 __pycache__
 MANIFEST
 dist/
