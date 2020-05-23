@@ -2,3 +2,5 @@ django==3.0.*
 django-cryptography
 uvicorn
 circus
+celery
+redis

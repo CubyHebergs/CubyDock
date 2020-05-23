@@ -159,7 +159,7 @@ code { color: #e7515a; }
 }
 
 
-/* 
+/*
 =====================
     Navigation Bar
 =====================
@@ -170,7 +170,7 @@ code { color: #e7515a; }
     border-bottom: 1px solid #060818;
 }
 .header-container .navbar {
-    padding: 4px 0;
+    /*padding: 4px 0;*/
 }
 .navbar {
     padding: 0;
@@ -582,18 +582,20 @@ code { color: #e7515a; }
     fill: rgba(0, 23, 55, 0.08);
 }
 
-/* 
+/*
 ===============
     Sidebar
 ===============
 */
 
 .sub-header-container {
-    position: fixed;
-    top: 53px;
-    width: 100%;
-    z-index: 1029;
-    display: flex;
+  position: fixed;
+  top: 66px;
+  width: 100%;
+  z-index: 1029;
+  /*display: flex;*/
+  height: 100px;
+  /*padding: 50px;*/
 }
 .sub-header-container .navbar {
     -webkit-box-shadow: 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12), 0 3px 5px -1px rgba(0,0,0,.2);
@@ -622,7 +624,7 @@ code { color: #e7515a; }
     display: flex;
     padding: 0 0;
 }
-.sub-header-container .breadcrumb-one { 
+.sub-header-container .breadcrumb-one {
     display: inline-block;
 }
 .sub-header-container .breadcrumb-one .breadcrumb {
@@ -661,7 +663,7 @@ code { color: #e7515a; }
 }
 .sub-header-container .more-dropdown .custom-dropdown-icon { padding-right: 20px; }
 .sub-header-container .more-dropdown .custom-dropdown-icon a.dropdown-toggle {
-    position: relative; 
+    position: relative;
     padding: 9px 35px 10px 15px;
     border: 1px solid #3b3f5c;
     border-radius: 8px;
@@ -716,7 +718,7 @@ code { color: #e7515a; }
     color: #e0e6ed;
 }
 
-/* 
+/*
 ===============
     Sidebar
 ===============
@@ -982,7 +984,7 @@ code { color: #e7515a; }
 }
 
 
-/*  
+/*
     ======================
         Footer-wrapper
     ======================
@@ -1019,7 +1021,7 @@ code { color: #e7515a; }
     vertical-align: text-top;
 }
 
-/*  
+/*
     ======================
         MEDIA QUERIES
     ======================

@@ -10,10 +10,15 @@ if [ "$input_reinstall" != "${input_reinstall#[Yy]}" ]; then
     echo "Reinstall again..."
     echo "Stop service..."
     sudo systemctl stop cubydock
+    sudo systemctl stop celery
     echo "Erase all file & database"
     sudo rm -rf /var/www/html/cubydock
     echo "Delete Service"
+    sudo rm -rf /var/log/celery
+    sudo rm -rf /var/run/celery
     sudo rm -rf /etc/systemd/system/cubydock.service
+    sudo rm -rf /etc/conf.d/celery
+    sudo rm -rf /etc/systemd/system/celery.service
     sudo rm -rf /usr/lib/systemd/system/cubydock.service
     sudo rm -rf /etc/systemd/system/multi-user.target.wants/cubydock.service
     sudo rm -rf /run/CubyDock
@@ -83,6 +88,8 @@ sudo python3 -m pip install -r ../requirements.txt
 
 # copy systemd Service
 sudo cp ../src/systemd/cubydock.service /etc/systemd/system/cubydock.service
+sudo cp ../src/systemd/celery/celery /etc/conf.d/celery
+sudo cp ../src/systemd/celery/celery.service /etc/systemd/system/celery.service
 sudo systemctl daemon-reload
 
 # check web directory exist
@@ -127,12 +134,24 @@ sudo python3 /var/www/html/cubydock/manage.py compilemessages
 sudo python3 /var/www/html/cubydock/manage.py makemigrations
 sudo python3 /var/www/html/cubydock/manage.py migrate
 
-# start service
+# start service docker and cubydock
 echo "Prepare service..."
 sudo systemctl enable cubydock
 sudo systemctl start cubydock
 sudo systemctl enable docker
 sudo systemctl start docker
+
+# prepare celery and run
+sudo mkdir /var/log/celery
+sudo chown -R cuby:cuby /var/log/celery
+sudo chmod -R 755 /var/log/celery
+
+sudo mkdir /var/run/celery
+sudo chown -R cuby:cuby /var/run/celery
+sudo chmod -R 755 /var/run/celery
+
+sudo systemctl enable celery
+sudo systemctl start celery
 
 service_stats=$(systemctl show -p SubState cubydock | sed 's/SubState=//g')
 

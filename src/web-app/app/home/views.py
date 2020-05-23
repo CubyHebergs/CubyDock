@@ -14,7 +14,7 @@ class Home():
             if request.user.is_authenticated:
                 return render(
                     request,
-                    'base/index.html'
+                    'base/base_content.html'
                 )
             else:
                 return render(
