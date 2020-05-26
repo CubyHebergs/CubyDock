@@ -14,6 +14,12 @@ if [ "$input_reinstall" != "${input_reinstall#[Yy]}" ]; then
     echo "Erase all file & database"
     sudo rm -rf /var/www/html/cubydock
     echo "Delete Service"
+    # delete sudoers cuby
+    #sudo head -n -1 /etc/sudoers > /etc/sudoers
+    sudo sed '$d' < /etc/sudoers > /etc/sudoers.temp
+    sudo cp /etc/sudoers /etc/sudoers.old
+    sudo cp /etc/sudoers.temp /etc/sudoers
+    sudo rm -rf /etc/sudoers.temp
     sudo rm -rf /var/log/celery
     sudo rm -rf /var/run/celery
     sudo rm -rf /etc/systemd/system/cubydock.service
@@ -150,8 +156,13 @@ sudo mkdir /var/run/celery
 sudo chown -R cuby:cuby /var/run/celery
 sudo chmod -R 755 /var/run/celery
 
+# add sudoers cuby
+sudo sh -c "echo \"cuby ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
+
 sudo systemctl enable celery
 sudo systemctl start celery
+
+
 
 service_stats=$(systemctl show -p SubState cubydock | sed 's/SubState=//g')
 
