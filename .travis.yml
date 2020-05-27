@@ -1,0 +1,22 @@
+language: python
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"      # current default Python on Travis CI
+  - "3.7"
+  - "3.8"
+  - "3.8-dev"  # 3.8 development branch
+  - "nightly"  # nightly build
+# command to install dependencies
+
+before_install:
+  - cd $HOME
+  - git clone git://github.com/CubyHebergs/CubyDock
+  - chmod +x CubyDock/bin/install.sh
+  - sh CubyDock/bin/install.sh
+  - source /var/www/html/cubydock/.venv/bin/activate
+
+# command to run tests
+script:
+  - python3 /var/www/html/cubydock/manage.py runtest
