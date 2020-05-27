@@ -1,5 +1,7 @@
 django==3.0.*
 django-cryptography
+django-cachalot
+django-redis
 uvicorn
 circus
 celery

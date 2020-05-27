@@ -53,22 +53,22 @@ fi
 if [[ "$DISTRO"  =~ "Manjaro" ]]; then
   DEPO="sudo pacman"
   DEPO_INSTALL="-S --noconfirm"
-  PACKAGE="docker pam"
+  PACKAGE="docker pam redis"
 
 elif [[ "$DISTRO"  =~ "Fedora" ]] || [[  "$DISTRO"  =~ "CentOS" ]] && [[  "$VERSION"  =~ "8." ]]; then
   DEPO="sudo dnf"
   DEPO_INSTALL="install -y"
-  PACKAGE="docker pam pam-devel"
+  PACKAGE="docker pam pam-devel redis"
 
 elif [[  "$DISTRO"  =~ "CentOS" ]] && [[  "$VERSION"  =~ "7." ]]; then
   DEPO="sudo yum"
   DEPO_INSTALL="install -y"
-  PACKAGE="docker pam pam-devel"
+  PACKAGE="docker pam pam-devel redis"
 
 elif [[ "$DISTRO"  =~ "Debian"  ]] || [[ "$DISTRO"  =~ "Ubuntu"  ]]; then
   DEPO="sudo apt-get update && sudo apt-get"
   DEPO_INSTALL="-y install"
-  PACKAGE="docker pam"
+  PACKAGE="docker pam redis"
 fi
 
 # check group cuby if already exist
@@ -146,6 +146,11 @@ sudo systemctl enable cubydock
 sudo systemctl start cubydock
 sudo systemctl enable docker
 sudo systemctl start docker
+sudo systemctl enable redis
+sudo sysctl vm.overcommit_memory=1
+sudo sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'
+sudo systemctl start redis
+
 
 # prepare celery and run
 sudo mkdir /var/log/celery
