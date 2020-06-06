@@ -1,0 +1,5 @@
+Flask==0.12.2
+Flask-Sockets
+docker==2.5
+werkzeug
+gevent

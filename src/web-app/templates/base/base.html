@@ -24,7 +24,10 @@
     <link href="{% static "plugins/apex/apexcharts.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "assets/css/dashboard/dash_1.css" %}" rel="stylesheet" type="text/css" />
     {% endblock %}
+    {% block custom_css %}
+    {% endblock custom_css %}
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+
 
 </head>
 <body>
@@ -50,8 +53,14 @@
         {% include "base/slidebar/slidebar.html" %}
 
         {# base content of page #}
-        {% block content %}
-        {% endblock %}
+        <div id="content" class="main-content">
+          {% block content %}
+          {% endblock content %}
+
+          {% block footer %}
+          {% endblock footer %}
+        </div>
+        <!--  END CONTENT AREA  -->
 
       {% endblock %}
 
@@ -81,6 +90,8 @@
     // using jQuery
     var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
   </script>
+  {% block custom_js %}
+  {% endblock custom_js %}
   <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
 </body>

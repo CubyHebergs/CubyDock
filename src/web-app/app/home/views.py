@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import login
 from app.tools.dpam.backends import PAMBackend
+from core.system.stats_system import *
 
 # Create your views here.
 class Home():
@@ -12,9 +13,14 @@ class Home():
 
         if request.method == "GET":
             if request.user.is_authenticated:
+                stats = System_stats()
+
+                statss = stats.stats_cpu
+
                 return render(
                     request,
-                    'base/base_content.html'
+                    'app/home/index.html',
+                    {"stats": statss}
                 )
             else:
                 return render(

@@ -84,7 +84,7 @@ if grep -q $group /etc/group
      sudo groupadd shadow
      sudo usermod -a -G cuby cuby
      sudo usermod -a -G shadow cuby
-     password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-8} | head -n 1)
+     password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9@./_#²' | fold -w 11 | head -n 1)
      echo "cuby:${password}" | sudo chpasswd
  fi
 
@@ -116,14 +116,25 @@ sudo chmod 775 -R /var/www/html/cubydock
 echo "Please select language for cubydock"
 echo "1. French"
 echo "2. English"
-read -e -p "select your language number ? :" input_language
+
+# travisci autoselect language
+if [ -z "$1" ]; then
+  read -e -p "select your language number ? :" input_language
+else
+  input_language=${1}
+  if [[ "$input_language"  =~ "fr" ]]; then
+    input_language="1"
+  elif [[ "$input_language"  =~ "en" ]]; then
+    input_language="2"
+  fi
+fi
 
 if [ "$input_language" != "${input_language#[1]}" ]; then
   echo "French language select"
-  sudo sed -i "139s/en/fr/g" /var/www/html/cubydock/cuby/settings.py
+  sudo sed -i "155s/en/fr/g" /var/www/html/cubydock/cuby/settings.py
 elif [ "$input_language" != "${input_language#[2]}" ]; then
   echo "English language select"
-  sudo sed -i "139s/en/en/g" /var/www/html/cubydock/cuby/settings.py
+  sudo sed -i "155s/en/en/g" /var/www/html/cubydock/cuby/settings.py
 fi
 
 # renewgenerate SECRET_KEY
@@ -167,8 +178,6 @@ sudo sh -c "echo \"cuby ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
 sudo systemctl enable celery
 sudo systemctl start celery
 
-
-
 service_stats=$(systemctl show -p SubState cubydock | sed 's/SubState=//g')
 
 if [[ "$service_stats"  != "running" ]]; then
@@ -181,7 +190,7 @@ else
   echo ""
   echo " -------------------------------------------------------- "
   echo "| Install finish web panel access on http://0.0.0.0:8000 |"
-  echo "|    Username is: cuby Your Password: ${password}           |"
+  echo "|    Username is: cuby Your Password: ${password}        |"
   echo " -------------------------------------------------------- "
 fi
 

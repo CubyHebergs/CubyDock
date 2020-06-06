@@ -1,4 +1,10 @@
 language: python
+
+jobs:
+  include:
+    - os: linux
+      dist: centos
+
 python:
   - "2.7"
   - "3.4"
@@ -10,11 +16,12 @@ python:
   - "nightly"  # nightly build
 # command to install dependencies
 
+
 before_install:
   - cd $HOME
   - git clone git://github.com/CubyHebergs/CubyDock
   - chmod +x CubyDock/bin/install.sh
-  - sh CubyDock/bin/install.sh
+  - ./CubyDock/bin/install.sh en
   - source /var/www/html/cubydock/.venv/bin/activate
 
 # command to run tests
