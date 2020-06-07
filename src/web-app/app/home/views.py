@@ -14,7 +14,6 @@ class Home():
 
         if request.method == "GET":
             if request.user.is_authenticated:
-
                 return render(
                     request,
                     'app/home/index.html',
@@ -39,7 +38,8 @@ class Home():
 
             if user is not None:
                 login(request, user)
-                return HttpResponse("login, success")
+                return render(request, "app/home/loading.html")
+
             else:
                 return render(
                     request,
