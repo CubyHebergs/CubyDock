@@ -15,7 +15,7 @@
           <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 layout-spacing">
               <div class="widget-three">
                   <div class="widget-heading">
-                      <h5 class="">Activiter du systeme <br>is cache: {{ cached.0 }} timeout: {{ cached.1 }}</h5>
+                      <h5 class="">Activiter du systeme <br></h5>
                   </div>
                   <div class="widget-content">
 
@@ -29,17 +29,17 @@
                                   <div class="w-summary-info">
                                       <h6>CPU</h6>
                                       <p class="summary-count" align="right">
-                                        {# freq_cpu_stats ({{ stats.total_nb_core }} * {{ stats.max_cpu_freq }}) {{ stats.total_frequency_available }} #}
-                                        {{ stats.all_hz_usage }} / ({{ stats.total_nb_core }} * {{ stats.max_cpu_freq }}) {{ stats.total_frequency_available }} <br>
-                                        {% if stats.overload > 0 %}
-                                        <span class="badge badge-danger">surcharge <span class="badge badge-light">{{ stats.overload|floatformat:"0" }}%</span></span>
+                                        {# freq_cpu_stats ({{ stats_cpu.total_nb_core }} * {{ stats_cpu.max_cpu_freq }}) {{ stats_cpu.total_frequency_available }} #}
+                                        {{ stats_cpu.all_hz_usage }} / ({{ stats_cpu.total_nb_core }} * {{ stats_cpu.max_cpu_freq }}) {{ stats_cpu.total_frequency_available }} <br>
+                                        {% if stats_cpu.overload > 0 %}
+                                        <span class="badge badge-danger">surcharge <span class="badge badge-light">{{ stats_cpu.overload|floatformat:"0" }}%</span></span>
                                         {% endif %}
                                       </p>
                                   </div>
 
                                   <div class="w-summary-stats">
                                       <div class="progress">
-                                          <div class="progress-bar bg-gradient-secondary" role="progressbar" style="width: {{ stats.all_percent_usage|floatformat:"0" }}%" aria-valuenow="{{ stats.all_percent_usage|floatformat:"0" }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                          <div class="progress-bar bg-gradient-secondary" role="progressbar" style="width: {{ stats_cpu.all_percent_usage|floatformat:"0" }}%" aria-valuenow="{{ stats_cpu.all_percent_usage|floatformat:"0" }}" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                   </div>
 
@@ -55,12 +55,12 @@
 
                                   <div class="w-summary-info">
                                       <h6>Ram</h6>
-                                      <p class="summary-count">(100%) 32Gb/32Gb</p>
+                                      <p class="summary-count">({{ stats_ram.all_percent_ram_used|floatformat:"0" }}%) {{ stats_ram.ram_used }} / {{ stats_ram.total_ram }}</p>
                                   </div>
 
                                   <div class="w-summary-stats">
                                       <div class="progress">
-                                          <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                          <div class="progress-bar bg-gradient-success" role="progressbar" style="width: {{ stats_ram.all_percent_ram_used|floatformat:"0" }}%" aria-valuenow="{{ stats_ram.all_percent_ram_used|floatformat:"0" }}" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                   </div>
 

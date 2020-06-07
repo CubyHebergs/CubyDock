@@ -17,7 +17,8 @@ class Home():
                 return render(
                     request,
                     'app/home/index.html',
-                    {"stats": stats_cpu()}
+                    {"stats_cpu": stats_cpu(),
+                     "stats_ram": stats_ram()}
                 )
             else:
                 return render(
