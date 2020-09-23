@@ -1,11 +1,15 @@
 import subprocess
 from quantiphy import Quantity
 from asgiref.sync import async_to_sync
+from ..docker.system import DockerSystem
+import shutil
 import psutil
 import docker
 import os
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+
+docker = DockerSystem()
 
 def calculate_cpu_percent(d, cpu_count):
 
@@ -21,16 +25,16 @@ def calculate_cpu_percent(d, cpu_count):
     else:
         return 0
 
-def stats_cpu():
-    client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+def stats_cpu(dockersystem=docker):
 
     list_line = []
     cpu_frequence =  subprocess.Popen(["cat", "/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
-    number_cpu =  client.info()['NCPU']
+    number_cpu =  dockersystem.info()['NCPU']
+
     total_frequence_available = int(number_cpu) * (int(cpu_frequence)*1000)
 
     list_cpu_usage = []
-    for container in client.containers.list():
+    for container in dockersystem.containers.list():
         list_cpu_usage.append(calculate_cpu_percent(container.stats(stream=False), number_cpu))
 
     sum_list_cpus = sum(list_cpu_usage)*1000/(int(number_cpu)*1000)
@@ -50,12 +54,11 @@ def stats_cpu():
             "total_frequency_available": Quantity(total_frequence_available, 'hz').render(prec=1),
     }
 
-def stats_ram():
-    client = docker.DockerClient(base_url='unix://var/run/docker.sock')
-    docker_info_memory_total =  client.info()['MemTotal']
+def stats_ram(dockersystem=docker):
+    docker_info_memory_total = dockersystem.info()['MemTotal']
 
     all_stats_ram = []
-    for container in client.containers.list():
+    for container in dockersystem.containers.list():
         if "usage" in container.stats(stream=False)['memory_stats'].keys():
             all_stats_ram.append(container.stats(stream=False)['memory_stats']['usage'])
         else:
@@ -67,5 +70,19 @@ def stats_ram():
     }
 
 
-def stats_storage():
-    pass
+def stats_storage(directory="/var/lib/docker/overlay2"):
+
+    total, used, free = shutil.disk_usage(directory)
+
+    total = total // (2**30)
+    used = used // (2**30)
+    free = free // (2**30)
+
+    percent_used = free * 100 / total
+
+    return { 'total': total ,
+             'used': used,
+             'free': free,
+             'percent_used': round(percent_used, 1),
+             'directory': directory
+    }

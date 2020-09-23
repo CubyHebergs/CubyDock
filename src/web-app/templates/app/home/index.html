@@ -4,6 +4,34 @@
 {% load i18n %}
 
 {% block custom_css %}
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2020.2.513/styles/kendo.default-v2.min.css"/>
+
+<style scoped>
+    /* allow menu to break out of treeview container */
+    div.k-treeview {
+      overflow: visible;
+    }
+
+    .parent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /*  not necessary, just to visualize it */
+
+  .parent {
+    height: 500px;
+  }
+  .text-log {
+    font-size-adjust: 0.4;
+  }
+
+  .text-center {
+    text-align: center !important;
+  }
+
+  </style>
 {% endblock custom_css %}
 
 <!--  BEGIN CONTENT AREA  -->
@@ -12,7 +40,7 @@
 
         <div class="row layout-top-spacing">
 
-          <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 layout-spacing">
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 layout-spacing">
               <div class="widget-three">
                   <div class="widget-heading">
                       <h5 class="">Activiter du systeme <br></h5>
@@ -75,13 +103,13 @@
                               <div class="w-summary-details">
 
                                   <div class="w-summary-info">
-                                      <h6>Disque</h6>
-                                      <p class="summary-count">(100%) 5Tb/5Tb</p>
+                                      <h6>Disque ({{ stats_disk.directory }})</h6>
+                                      <p class="summary-count">({{ stats_disk.percent_used }}%) {{ stats_disk.used }} Gb/{{ stats_disk.total }} Gb</p>
                                   </div>
 
                                   <div class="w-summary-stats">
                                       <div class="progress">
-                                          <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                          <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: {{ stats_disk.percent_used|floatformat:"0" }}%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                   </div>
 
@@ -94,6 +122,79 @@
                   </div>
               </div>
           </div>
+
+        </div>
+
+        <div class="row layout-top-spacing">
+
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 layout-spacing">
+              <div class="widget-three">
+                  <div class="widget-heading">
+                      <h5 class="">Vos containeurs<br></h5>
+                  </div>
+                  <div class="widget-content">
+                    <div class="parent" style="height: 900px;">
+                      <div style="width: 200px;">
+                          <div id="treeview"></div>
+                      </div>
+
+                      <ul id="menu1"></ul>
+                      <div>
+                        <div id="text-log" data-id="taskmanager">Activity Log</div>
+                        <div style="border: dotted grey;border-width: 0.2em 0 0px;margin-top: 10px;padding-bottom: 5px;">
+                          <table class="table table-responsive" id="taskmanager" width="100%">
+                            <thead>
+                              <th class="text-center" style="width: 50px;">Action</th>
+                              <th class="text-center" style="width: 50px;">Status</th>
+                              <th class="text-center" style="width: 50px;">Progress</th>
+                              <th class="text-center" style="width: 50px;">Cible<th>
+                            </thead>
+                            <tbody>
+                              <tr id="37">
+                                <td class="text-center" style="width: 100px;">AddContainer</td>
+                                <td class="text-center" style="width: 100px;">InProgress</td>
+                                <td class="text-center" style="width: 100px;">
+                                  <div class="progress">
+                                    <div id="progressbar" class="progress-bar bg-gradient-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                  </div>
+                                </td>
+                                <td class="text-center"style="width: 100px;">
+                                  <a href="#">10.32.0.25</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="text-center" style="width: 100px;">AddContainer</td>
+                                <td class="text-center" style="width: 100px;">InProgress</td>
+                                <td class="text-center" style="width: 100px;">
+                                  <div class="progress">
+                                    <div id="progressbar" class="progress-bar bg-gradient-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                  </div>
+                                </td>
+                                <td class="text-center"style="width: 100px;">
+                                  <a href="#">10.32.0.25</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="text-center" style="width: 100px;">AddContainer</td>
+                                <td class="text-center" style="width: 100px;">InProgress</td>
+                                <td class="text-center" style="width: 100px;">
+                                  <div class="progress">
+                                    <div id="progressbar" class="progress-bar bg-gradient-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                  </div>
+                                </td>
+                                <td class="text-center"style="width: 100px;">
+                                  <a href="#">10.32.0.25</a>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+
         </div>
 
     </div>
@@ -111,4 +212,370 @@
     {% endblock footer %}
 
 {% block custom_js %}
+
+
+<script>
+
+  let id_taskmanager = 0;
+  let dict_progress = {};
+
+  (function ($) {
+      $.fn.taskManager = function (options) {
+          let settings = jQuery.extend({}, options);
+          let $jq = this;
+          let that = this;
+          let number_task = that[0].children[1].children.length;
+          let output = {
+            'GetId': function(id){
+                $(that[0].children[1].children).each(function(index, value) {
+                  if (id == value.id){
+                      id_taskmanager = value;
+                  }
+                });
+                return output;
+            },
+            'addTask': function(param){
+                $(that[0].children[1]).append("<tr id=\""+param["id"]+"\"> \
+                                              <td>"+param['action']+"</td> \
+                                              <td>"+param['status']+"</td> \
+                                              <td><div class=\"progress\"> \
+                                                    <div id=\"taskmanager_progress"+number_task+"\" class=\"progress-bar bg-gradient-warning\" role=\"progressbar\" style=\"width: "+param['progress']+"%\" aria-valuenow=\""+  param['progress']+"\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div> \
+                                              </div></td> \
+                                              <td>"+param['target']+"</td> \
+                                              </tr>");
+                id_taskmanager = "taskmanager_progress"+number_task;
+                return output;
+            },
+            'remove': function(){
+                id_taskmanager.remove();
+                return output;
+            },
+            'init': function () {
+              $jq.each(function () {
+                  var _this = this;
+                  _this.$this = $(this);
+                  _this._param = "value";
+              });
+            return output.GetId(settings.param);
+        }
+      }
+  output.init();
+  return output;
+  };
+})(jQuery);
+
+$.fn.progressbar = function custom_progressbar(parm) {
+    this.css('width', parm['value']);
+    this.attr('aria-valuenow', parm['value']);
+    return this;
+}
+
+$( function() {
+  let progress = $("#progressbar").progressbar({
+    value: 37
+  });
+
+  let taskmanager = $("#taskmanager").taskManager();
+  taskmanager.GetId("37").remove();
+  taskmanager.addTask({"id": 10, "action": "Addcontainer", "status": "Inprogress", "progress": 0, "target": "10.32.0.253"});
+});
+</script>
+
+
+<script src="https://kendo.cdn.telerik.com/2020.2.513/js/kendo.all.min.js"></script>
+
+<script id="editTemplate" type="text/x-kendo-template">
+  <label>Text: <input class="k-textbox" value="#= node.text #" /></label>
+  <button class="k-button k-primary">Save</button>
+</script>
+
+<script id="deletemultichildren" type="text/x-kendo-template">
+  <p><label>Attention vous vous appreter a supprimer un groupe avec plusieur element voulez vous continuer ?</label></p>
+  <button class="k-button k-primary">Je souhaite supprimer tous c'est element</button>
+  <button class="k-button k-not">Non</button>
+</script>
+
+<script id="adddockerserver" type="text/x-kendo-template">
+  <p><div class="row">
+    <div class="col-lg-6"><label>Serveur IP<input class="k-host" name="host-ip" value="" /></label><br>
+      <label>Utilisateur<input class="k-user" name="host-user" value="" /></label><br>
+      <label>Mot de passe<input class="k-password" type="password" name="host-password" value="" autocomplete="new-password"/></label>
+    </div>
+  </div></p>
+  <button class="k-button k-primary">Save</button>
+</script>
+
+<script>
+  var items = [
+    { text: "Manager CubyDock (2)<br> - 10.32.0.254<br> - 10.32.0.253", encoded: false, action: "ManagerController", imageUrl: "{% static "assets/img/treeview/images/controller_cubydock.png" %}",
+      contextmenu: [
+        { text: "Editer le controlleur", action: "EditController" },
+        { text: "Ajouter un groupe", action: "addGroupDocker" },
+        { text: "Ajouter un serveur docker", action: "addDockerServer" }
+      ],
+      items: [
+        { text: "Serveur - 10.32.0.25", imageUrl: "{% static "assets/img/treeview/images/docker_computer.png" %}", contextmenu: [
+                { text: "Ajouter un groupe container", action: "addGroupContainer" },
+                { text: "Ajouter un container", action: "addDockerContainer" },
+                { text: "Renommer", action: "rename" },
+                { text: "Supprimer", action: "remove" },
+              ]},
+        { text: "Item3", imageUrl: "{% static "assets/img/treeview/images/docker_computer.png" %}" }
+      ] },
+    { text: "Item4", expanded: false }
+  ];
+
+  $(document).ready(function() {
+
+    function hiddenLogs() {
+      var id_numero = $(this).data('id');
+
+      if ($("#"+id_numero).is(':hidden')) {
+        $("#"+id_numero).show();
+        $(this).find("span").text("-");
+      } else {
+        $("#"+id_numero).hide();
+        $(this).find("span").text("+");
+      }
+    }
+
+    hiddenbutton = $("#text-log");
+    hiddenbutton.on("click", hiddenLogs);
+
+      let editTemplate = kendo.template($("#editTemplate").html());
+      let deletemultichildren = kendo.template($("#deletemultichildren").html());
+      let adddockerserver = kendo.template($("#adddockerserver").html());
+
+      $("#treeview").kendoTreeView({
+        dragAndDrop: true,
+        drop: onDrop,
+        dataSource: items,
+        select: onSelect,
+      });
+
+      function onDrop(e) {
+         let data = $('#treeview').data('kendoTreeView').dataItem(e.sourceNode);
+         let newData = $('#treeview').data('kendoTreeView').dataItem(e.destinationNode);
+         let targetsRoot = $(e.dropTarget).parentsUntil(".k-treeview", ".k-item").length == 1;
+
+         if (newData === undefined){
+           e.setValid(false);
+         } else {
+
+           // // do not allow changing levels
+           // if (data.IsParent != newData.IsParent && e.dropPosition != "over") {
+           //     e.setValid(false);
+           // }
+
+           // do not allow adding to children if is controller docker
+           if (data.imageUrl == newData.imageUrl && data.imageUrl == "/static/assets/img/treeview/images/docker_computer.png") {
+               e.setValid(false);
+           }
+
+           if (targetsRoot && e.statusClass != "add") {
+             e.setValid(false);
+          }
+       }
+      }
+
+      function onSelect(e) {
+        let menuselected = "";
+
+        if (e.node !== undefined) {
+          /** if is item menu **/
+          let uid = e.node.attributes['data-uid'].value;
+          menuselected =  e.sender._dataSourceUids[uid];
+
+        } else {
+          /** if is item contextmenu **/
+          let uid = e.item.attributes['data-uid'].value;
+          nodeselected = $("#treeview").getKendoTreeView().dataItem($(e.target).closest(".k-item"));
+          $(nodeselected.contextmenu).each(function(key, item) {
+            if (item.uid == uid){
+              menuselected = item;
+            }
+          });
+        }
+
+        /** get action and id **/
+        let action = menuselected.action;
+        let id = menuselected.id;
+        let textitem = menuselected.text;
+
+        if (action == "remove"){
+          let treeview = $("#treeview").data("kendoTreeView");
+          let matches = treeview.findByText(e.target.textContent);
+
+          for(i = 0; i < matches.length; i++) {
+            let dataItem = treeview.dataItem(matches[i]);
+            if(!dataItem.hasChildren) {
+              let text = treeview.findByText(e.target.textContent);
+              treeview.remove(text);
+              //treeview.dataItem(matches[i]).set("checked", true);
+            } else {
+              let text = treeview.findByText(e.target.textContent);
+
+              $("<div />")
+                .html(deletemultichildren({}))
+                .appendTo("body")
+                .kendoWindow({
+                  modal: true,
+                  visible: false,
+                  deactivate: function() {
+                    this.destroy();
+                  }
+                })
+                // bind window button
+                .on("click", ".k-primary", function(e) {
+                  e.preventDefault();
+                  let dialog = $(e.currentTarget).closest("[data-role=window]").getKendoWindow();
+                  treeview.remove(text);
+
+                  dialog.close();
+
+                })
+                // bind window button
+                .on("click", ".k-not", function(e) {
+                  e.preventDefault();
+
+                  let dialog = $(e.currentTarget).closest("[data-role=window]").getKendoWindow();
+                  dialog.close();
+
+                })
+                .getKendoWindow().center().open();
+
+              console.log("has children");
+            }
+          }
+
+
+        }
+
+        if (action == "addGroupDocker"){
+          let treeview = $("#treeview").data("kendoTreeView");
+
+          text = "Nouveau Groupe";
+          group = $("#treeview li:contains('"+text+"')")
+
+          i = 1;
+          number = 1;
+
+          if (group.length > 0){
+            number = (i+group.length)-1;
+          }
+
+          // detect if parent if server don't possible to add group of server this
+          if (e.target.children[0].attributes.src.value == "/static/assets/img/treeview/images/docker_computer.png") {
+            treeview.append({ text: "Nouveau Groupe ("+number+")", imageUrl: "{% static "assets/img/treeview/images/group_docker.png" %}", contextmenu: [
+                    { text: "Ajouter un groupe container", action: "addGroupContainer" },
+                    { text: "Ajouter un container", action: "addDockerContainer" },
+                    { text: "Renommer", action: "rename" },
+                    { text: "Supprimer", action: "remove" }
+            ]});
+          } else {
+            treeview.append({ text: "Nouveau Groupe ("+number+")", imageUrl: "{% static "assets/img/treeview/images/group_docker.png" %}", contextmenu: [
+                    { text: "Ajouter un sous-groupe", action: "addGroupDocker" },
+                    { text: "Ajouter un serveur", action: "addDockerServer" },
+                    { text: "Renommer", action: "rename" },
+                    { text: "Supprimer", action: "remove" }
+            ]});
+          }
+
+          treeview.append(treeview.findByText("Nouveau Groupe ("+number+")"), treeview.findByText(e.target.textContent));
+        }
+
+        if (action == "addDockerServer"){
+          let treeview = $("#treeview").data("kendoTreeView");
+
+          $("<div />")
+            .html(adddockerserver({}))
+            .appendTo("body")
+            .kendoWindow({
+              modal: true,
+              visible: false,
+              deactivate: function() {
+                this.destroy();
+              }
+            })
+            // bind window button
+            .on("click", ".k-primary", function(ev) {
+              e.preventDefault();
+
+              let dialog = $(ev.currentTarget).closest("[data-role=window]").getKendoWindow();
+
+              let host = dialog.element.find(".k-host");
+              let username = dialog.element.find(".k-user");
+              let password = dialog.element.find(".k-password");
+
+              treeview.append({ text: host.val(), imageUrl: "{% static "assets/img/treeview/images/docker_computer.png" %}", contextmenu: [
+                      { text: "Ajouter un groupe container", action: "addGroupContainer" },
+                      { text: "Ajouter un container", action: "addDockerContainer" },
+                      { text: "Renommer", action: "rename" },
+                      { text: "Supprimer", action: "remove" }
+              ]});
+
+              treeview.append(treeview.findByText(host.val()), treeview.findByText(e.target.textContent));
+              dialog.close();
+
+            })
+            .getKendoWindow().center().open();
+
+        }
+
+        if (action == "rename"){
+          let node = $("#treeview").getKendoTreeView().dataItem(e.target);
+
+          // create & open window
+          $("<div />")
+          	.html(editTemplate({ node: node }))
+          	.appendTo("body")
+            .kendoWindow({
+              modal: true,
+              visible: false,
+              deactivate: function() {
+                this.destroy();
+              }
+            })
+          	// bind window button
+            .on("click", ".k-primary", function(e) {
+              e.preventDefault();
+
+              let dialog = $(e.currentTarget).closest("[data-role=window]").getKendoWindow();
+              let textbox = dialog.element.find(".k-textbox");
+
+              node.set("text", textbox.val());
+              dialog.close();
+
+            })
+          	.getKendoWindow().center().open();
+          }
+
+      }
+
+    $("#menu1").kendoContextMenu({
+      target: "#treeview",
+      // show when the user clicks node text is clicked
+      filter: ".k-in",
+      open: function(e) {
+        let treeview = $("#treeview").data("kendoTreeView");
+        let node = e.target;
+        let dataItem = treeview.dataItem(node);
+        let data = [];
+
+        let type = dataItem.contextmenu;
+
+        if (type !== undefined){
+          data = type;
+        }
+
+        e.sender.setOptions({
+          dataSource: data,
+          select: onSelect,
+
+        });
+      }
+    });
+
+  });
+</script>
 {% endblock custom_js %}
