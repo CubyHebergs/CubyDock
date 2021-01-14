@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# check version Python
+Python=$(python -c "import sys; print('.'.join(map(str, sys.version_info[:2])))")
+sudo sed -i "15s/.venv\/bin\/python3.8/.venv\/bin\/python${Python}/g" ../src/systemd/cubydock.service
+
 # check if directory exist
 if [ -d "/var/www/html/cubydock" ]; then
   read -e -p "cubydock is already install you are realy sur to reinstall ? : (Y/n) " input_reinstall
@@ -84,6 +88,8 @@ if grep -q $group /etc/group
      sudo groupadd shadow
      sudo usermod -a -G cuby cuby
      sudo usermod -a -G shadow cuby
+     sudo usermod -aG docker cuby
+     sudo setfacl -m u:cuby:rwx /var/run
      password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9@./_#²' | fold -w 11 | head -n 1)
      echo "cuby:${password}" | sudo chpasswd
  fi
@@ -111,6 +117,8 @@ sudo python3 -m pip install -r ../requirements-env.txt
 sudo cp -R ../src/web-app/. /var/www/html/cubydock
 sudo chown cuby:cuby -R /var/www/html/cubydock
 sudo chmod 775 -R /var/www/html/cubydock
+sudo setfacl -R -d -m u:cuby:rwx /var/www/html/cubydock
+sudo setfacl -R -d -m o:cuby:rwx /var/www/html/cubydock
 
 # select language install
 echo "Please select language for cubydock"
@@ -216,3 +224,5 @@ elif [ "$input_reboot" != "${input_reboot#[Nn]}" ]; then
     echo "Ok, good bye"
     exit
 fi
+
+sudo chown cuby:cuby -R /var/www/html/cubydock
