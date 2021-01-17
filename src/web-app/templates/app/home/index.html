@@ -140,7 +140,7 @@
 
                       <ul id="menu1"></ul>
                       <div>
-                        <div id="text-log" data-id="taskmanager">Activity Log</div>
+                        <div id="text-log" data-id="taskmanager">Tache systeme</div>
                         <div style="border: dotted grey;border-width: 0.2em 0 0px;margin-top: 10px;padding-bottom: 5px;">
                           <table class="table table-responsive" id="taskmanager" width="100%">
                             <thead>
@@ -150,42 +150,6 @@
                               <th class="text-center" style="width: 50px;">Cible<th>
                             </thead>
                             <tbody>
-                              <tr id="37">
-                                <td class="text-center" style="width: 100px;">AddContainer</td>
-                                <td class="text-center" style="width: 100px;">InProgress</td>
-                                <td class="text-center" style="width: 100px;">
-                                  <div class="progress">
-                                    <div id="progressbar" class="progress-bar bg-gradient-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                                </td>
-                                <td class="text-center"style="width: 100px;">
-                                  <a href="#">10.32.0.25</a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td class="text-center" style="width: 100px;">AddContainer</td>
-                                <td class="text-center" style="width: 100px;">InProgress</td>
-                                <td class="text-center" style="width: 100px;">
-                                  <div class="progress">
-                                    <div id="progressbar" class="progress-bar bg-gradient-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                                </td>
-                                <td class="text-center"style="width: 100px;">
-                                  <a href="#">10.32.0.25</a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td class="text-center" style="width: 100px;">AddContainer</td>
-                                <td class="text-center" style="width: 100px;">InProgress</td>
-                                <td class="text-center" style="width: 100px;">
-                                  <div class="progress">
-                                    <div id="progressbar" class="progress-bar bg-gradient-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                                </td>
-                                <td class="text-center"style="width: 100px;">
-                                  <a href="#">10.32.0.25</a>
-                                </td>
-                              </tr>
                             </tbody>
                           </table>
                         </div>
@@ -276,8 +240,8 @@ $( function() {
   });
 
   let taskmanager = $("#taskmanager").taskManager();
-  taskmanager.GetId("37").remove();
   taskmanager.addTask({"id": 10, "action": "Addcontainer", "status": "Inprogress", "progress": 0, "target": "10.32.0.253"});
+  //taskmanager.GetId("10").remove();
 });
 </script>
 
@@ -296,7 +260,8 @@ $( function() {
 </script>
 
 <script id="adddockerserver" type="text/x-kendo-template">
-  <p><div class="row">
+  <p>
+    <div class="row">
     <div class="col-lg-6"><label>Serveur IP<input class="k-host" name="host-ip" value="" /></label><br>
       <label>Utilisateur<input class="k-user" name="host-user" value="" /></label><br>
       <label>Mot de passe<input class="k-password" type="password" name="host-password" value="" autocomplete="new-password"/></label>
@@ -305,24 +270,45 @@ $( function() {
   <button class="k-button k-primary">Save</button>
 </script>
 
+<script id="adddocker" type="text/x-kendo-template">
+  <p>
+    <div class="row">
+    <div class="col-lg-6"><label>Serveur IP<input class="k-host" name="host-ip" value="" /></label><br>
+      <label>Utilisateur<input class="k-user" name="host-user" value="" /></label><br>
+      <label>Mot de passe<input class="k-password" type="password" name="host-password" value="" autocomplete="new-password"/></label>
+    </div>
+  </div></p>
+  <button class="k-button k-primary">Save</button>
+</script>
+
+<script id="adddockercontainer" type="text/x-kendo-template">
+  <p>
+    <div class="row">
+    <div class="col-lg-6"><label>Nom containeur: <input class="k-name" name="host-ip" value="" /></label>
+    </div>
+  </div></p>
+  <button class="k-button k-primary">Save</button>
+</script>
+
 <script>
   var items = [
-    { text: "Manager CubyDock (2)<br> - 10.32.0.254<br> - 10.32.0.253", encoded: false, action: "ManagerController", imageUrl: "{% static "assets/img/treeview/images/controller_cubydock.png" %}",
+    { text: "Manager CubyDock", encoded: false, action: "ManagerController", imageUrl: "{% static "assets/img/treeview/images/controller_cubydock.png" %}",
       contextmenu: [
         { text: "Editer le controlleur", action: "EditController" },
         { text: "Ajouter un groupe", action: "addGroupDocker" },
         { text: "Ajouter un serveur docker", action: "addDockerServer" }
       ],
-      items: [
-        { text: "Serveur - 10.32.0.25", imageUrl: "{% static "assets/img/treeview/images/docker_computer.png" %}", contextmenu: [
-                { text: "Ajouter un groupe container", action: "addGroupContainer" },
-                { text: "Ajouter un container", action: "addDockerContainer" },
-                { text: "Renommer", action: "rename" },
-                { text: "Supprimer", action: "remove" },
-              ]},
-        { text: "Item3", imageUrl: "{% static "assets/img/treeview/images/docker_computer.png" %}" }
-      ] },
-    { text: "Item4", expanded: false }
+      items: []
+    },
+      // items: [
+      //   { text: "Serveur - 10.32.0.25", imageUrl: "{% static "assets/img/treeview/images/docker_computer.png" %}", contextmenu: [
+      //           { text: "Ajouter un groupe container", action: "addGroupContainer" },
+      //           { text: "Ajouter un container", action: "addDockerContainer" },
+      //           { text: "Renommer", action: "rename" },
+      //           { text: "Supprimer", action: "remove" },
+      //         ]},
+      //   { text: "Item3", imageUrl: "{% static "assets/img/treeview/images/docker_computer.png" %}" }
+      // ]},
   ];
 
   $(document).ready(function() {
@@ -345,6 +331,8 @@ $( function() {
       let editTemplate = kendo.template($("#editTemplate").html());
       let deletemultichildren = kendo.template($("#deletemultichildren").html());
       let adddockerserver = kendo.template($("#adddockerserver").html());
+      let adddockercontainer = kendo.template($("#adddockercontainer").html());
+
 
       $("#treeview").kendoTreeView({
         dragAndDrop: true,
@@ -425,6 +413,7 @@ $( function() {
                     this.destroy();
                   }
                 })
+
                 // bind window button
                 .on("click", ".k-primary", function(e) {
                   e.preventDefault();
@@ -491,6 +480,7 @@ $( function() {
             .html(adddockerserver({}))
             .appendTo("body")
             .kendoWindow({
+              title: 'Connection SSH',
               modal: true,
               visible: false,
               deactivate: function() {
@@ -519,8 +509,42 @@ $( function() {
 
             })
             .getKendoWindow().center().open();
-
         }
+
+        if (action == "addDockerContainer"){
+          let treeview = $("#treeview").data("kendoTreeView");
+
+          $("<div />")
+            .html(adddockercontainer({}))
+            .appendTo("body")
+            .kendoWindow({
+              title: 'Ajouter un container',
+              modal: true,
+              visible: false,
+              deactivate: function() {
+                this.destroy();
+              }
+            })
+            // bind window button
+            .on("click", ".k-primary", function(ev) {
+              e.preventDefault();
+
+              let dialog = $(ev.currentTarget).closest("[data-role=window]").getKendoWindow();
+              let name = dialog.element.find(".k-name");
+
+              treeview.append({ text: name.val(), imageUrl: "{% static "assets/img/treeview/images/docker_container.png" %}", contextmenu: [
+                      { text: "Renommer", action: "rename" },
+                      { text: "Supprimer", action: "remove" }
+              ]});
+
+              treeview.append(treeview.findByText(name.val()), treeview.findByText(e.target.textContent));
+              dialog.close();
+
+            })
+            .getKendoWindow().center().open();
+        }
+
+
 
         if (action == "rename"){
           let node = $("#treeview").getKendoTreeView().dataItem(e.target);
