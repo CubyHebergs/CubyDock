@@ -116,7 +116,7 @@ sudo python3 -m pip install -r ../requirements-env.txt
 # copy web directory and fix permission group and user
 sudo cp -R ../src/web-app/. /var/www/html/cubydock
 sudo chown cuby:cuby -R /var/www/html/cubydock
-sudo chmod 775 -R /var/www/html/cubydock
+#sudo chmod 775 -R /var/www/html/cubydock
 sudo setfacl -R -d -m u:cuby:rwx /var/www/html/cubydock
 sudo setfacl -R -d -m o:cuby:rwx /var/www/html/cubydock
 
@@ -179,6 +179,8 @@ sudo chmod -R 755 /var/log/celery
 sudo mkdir /var/run/celery
 sudo chown -R cuby:cuby /var/run/celery
 sudo chmod -R 755 /var/run/celery
+sudo setfacl -R -d -m u:cuby:rwx /var/run/celery
+sudo setfacl -R -d -m o:cuby:rwx /var/run/celery
 
 # add sudoers cuby
 sudo sh -c "echo \"cuby ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
