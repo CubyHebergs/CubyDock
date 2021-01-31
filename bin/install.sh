@@ -2,7 +2,7 @@
 
 # check version Python
 Python=$(python -c "import sys; print('.'.join(map(str, sys.version_info[:2])))")
-sudo sed -i "15s/.venv\/bin\/python3.8/.venv\/bin\/python${Python}/g" ../src/systemd/cubydock.service
+sudo sed -i "15s/.venv\/bin\/{python}/.venv\/bin\/python${Python}/g" ../src/systemd/cubydock.service
 
 # check if directory exist
 if [ -d "/var/www/html/cubydock" ]; then

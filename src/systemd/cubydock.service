@@ -3,8 +3,8 @@ Description=CubyDock servie webpanel
 After=syslog.target network.target nss-lookup.target
 
 [Service]
-User=cuby
-Group=cuby
+User=root
+Group=root
 Type=simple
 LogLevelMax=3
 StandardOutput=null
@@ -12,7 +12,7 @@ PIDFile=/var/run/cubydock.pid
 Environment=VIRTUAL_ENV=/var/www/html/cubydock/.venv/bin
 WorkingDirectory=/var/www/html/cubydock
 ExecReload=/var/www/html/cubydock/.venv/bin/circusctl reload
-ExecStart=/var/www/html/cubydock/.venv/bin/python3.9 /var/www/html/cubydock/.venv/bin/circusd /var/www/html/cubydock/circus.ini --log-output /var/www/html/cubydock/debugservice.log --pidfile /var/run/cubydock.pid
+ExecStart=/var/www/html/cubydock/.venv/bin/{python} /var/www/html/cubydock/.venv/bin/circusd /var/www/html/cubydock/circus.ini --log-output /var/www/html/cubydock/debugservice.log --pidfile /var/run/cubydock.pid
 Restart=always
 RestartSec=5
 
